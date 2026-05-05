@@ -46,6 +46,7 @@ code {
   gap: 1.25rem;
   min-height: 100vh;
   padding: 1.25rem;
+  grid-template-rows: auto minmax(0, 1fr);
 }
 
 .hero-panel,
@@ -112,6 +113,17 @@ code {
   cursor: pointer;
 }
 
+.secondary-button,
+.notes-toggle {
+  padding: 0.9rem 1.2rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .map-panel {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -120,10 +132,17 @@ code {
 }
 
 .map-stage {
-  min-height: 58vh;
+  min-height: 72vh;
   border-radius: 22px;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(16, 46, 65, 0.85), rgba(4, 15, 24, 0.95));
+}
+
+.map-stage:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  border-radius: 0;
 }
 
 .map-canvas {
@@ -144,9 +163,16 @@ code {
   padding: 0.25rem 0.4rem 0.1rem;
 }
 
+.notes-closed .map-notes p {
+  display: none;
+}
+
+.notes-closed .map-notes {
+  align-content: start;
+}
+
 @media (min-width: 980px) {
   .app-shell {
-    grid-template-rows: auto minmax(0, 1fr);
     padding: 1.4rem;
   }
 
@@ -160,8 +186,12 @@ code {
   }
 
   .map-panel {
-    grid-template-columns: minmax(0, 1fr) 280px;
+    grid-template-columns: minmax(0, 1fr) 240px;
     align-items: stretch;
+  }
+
+  .notes-closed {
+    grid-template-columns: minmax(0, 1fr) 148px;
   }
 
   .map-notes {

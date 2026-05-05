@@ -28,9 +28,12 @@ export default function App() {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<DragState | null>(null);
   const [viewport, setViewport] = useState<Viewport>({ width: 0, height: 0 });
-  const [center, setCenter] = useState<MapCenter>({ lon: 0, lat: 12 });
+  const defaultCenter: MapCenter = { lon: 0, lat: 12 };
+  const [center, setCenter] = useState<MapCenter>(defaultCenter);
   const [meshTriangles, setMeshTriangles] = useState<Triangle[]>([]);
   const [meshStatus, setMeshStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [notesOpen, setNotesOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const element = stageRef.current;
@@ -48,6 +51,15 @@ export default function App() {
 
     resizeObserver.observe(element);
     return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    function syncFullscreenState() {
+      setIsFullscreen(document.fullscreenElement === stageRef.current);
+    }
+
+    document.addEventListener('fullscreenchange', syncFullscreenState);
+    return () => document.removeEventListener('fullscreenchange', syncFullscreenState);
   }, []);
 
   useEffect(() => {
@@ -135,6 +147,21 @@ export default function App() {
     }
   }
 
+  async function handleFullscreenToggle() {
+    const stage = stageRef.current;
+
+    if (!stage) {
+      return;
+    }
+
+    if (document.fullscreenElement === stage) {
+      await document.exitFullscreen();
+      return;
+    }
+
+    await stage.requestFullscreen();
+  }
+
   return (
     <main className="app-shell">
       <section className="hero-panel">
@@ -158,13 +185,17 @@ export default function App() {
             <strong>{meshStatus === 'ready' ? `${meshTriangles.length} triangles` : meshStatus}</strong>
           </div>
 
-          <button className="reset-button" onClick={() => setCenter({ lon: -42, lat: 72 })} type="button">
-            Snap to Greenland
+          <button className="reset-button" onClick={() => setCenter(defaultCenter)} type="button">
+            Snap to Regular View
+          </button>
+
+          <button className="secondary-button" onClick={handleFullscreenToggle} type="button">
+            {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Map'}
           </button>
         </div>
       </section>
 
-      <section className="map-panel">
+      <section className={`map-panel ${notesOpen ? 'notes-open' : 'notes-closed'}`}>
         <div className="map-stage" ref={stageRef}>
           <canvas
             className="map-canvas"
@@ -177,9 +208,13 @@ export default function App() {
         </div>
 
         <aside className="map-notes">
+          <button className="notes-toggle" onClick={() => setNotesOpen((open) => !open)} type="button">
+            {notesOpen ? 'Hide Notes' : 'Show Notes'}
+          </button>
+
           <p>Drag left or right to shift the central longitude.</p>
           <p>Drag up or down to shift the central latitude inside safe Mercator bounds.</p>
-          <p>The seam wraps at the antimeridian. Greenland shortcut gives a quick acceptance check.</p>
+          <p>The seam wraps at the antimeridian. Use the reset button to return to the standard world view.</p>
         </aside>
       </section>
     </main>
