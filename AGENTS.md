@@ -11,9 +11,7 @@ Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
 
 ## Intensity
 
-| Level | What change |
-|-------|------------|
-| **lite** | No filler/hedging. Keep articles + full sentences. Professional but tight |
+No filler/hedging. Keep articles + full sentences. Professional but tight
 
 Example — "Why React component re-render?"
 - lite: "Your component re-renders because you create a new object reference each render. Wrap it in `useMemo`."
