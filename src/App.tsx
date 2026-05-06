@@ -200,17 +200,29 @@ export default function App() {
             <strong>{meshStatus === 'ready' ? `${meshTriangles.length} triangles` : meshStatus}</strong>
           </div>
 
-          <label>
-            <span className="telemetry-label">Projection</span>
-            <select
-              className="projection-select"
-              onChange={(event) => setProjectionKind(event.target.value as ProjectionKind)}
-              value={projectionKind}
-            >
-              <option value="mercator">Mercator</option>
-              <option value="orthographic">Orthographic</option>
-            </select>
-          </label>
+          <fieldset className="projection-toggle">
+            <legend className="telemetry-label">Projection</legend>
+
+            <label className="projection-option">
+              <input
+                checked={projectionKind === 'mercator'}
+                name="projection-kind"
+                onChange={() => setProjectionKind('mercator')}
+                type="radio"
+              />
+              <span>Mercator</span>
+            </label>
+
+            <label className="projection-option">
+              <input
+                checked={projectionKind === 'orthographic'}
+                name="projection-kind"
+                onChange={() => setProjectionKind('orthographic')}
+                type="radio"
+              />
+              <span>Orthographic</span>
+            </label>
+          </fieldset>
 
           <button className="reset-button" onClick={() => setCenter(defaultCenter)} type="button">
             Snap to Regular View
