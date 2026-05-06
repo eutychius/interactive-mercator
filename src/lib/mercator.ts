@@ -37,6 +37,37 @@ export function normalizeLongitude(longitude: number): number {
   return ((longitude + 180) % 360 + 360) % 360 - 180;
 }
 
+function toRadians(value: number): number {
+  return (value * Math.PI) / 180;
+}
+
+function lonLatToVector([longitude, latitude]: LonLat): [number, number, number] {
+  const lon = toRadians(longitude);
+  const lat = toRadians(latitude);
+  const cosLat = Math.cos(lat);
+
+  return [cosLat * Math.cos(lon), Math.sin(lat), cosLat * Math.sin(lon)];
+}
+
+function isTriangleVisibleOrthographic(triangle: Triangle, center: MapCenter): boolean {
+  const centerLon = toRadians(center.lon);
+  const centerLat = toRadians(center.lat);
+  const cosCenterLat = Math.cos(centerLat);
+  const centerVector: [number, number, number] = [
+    cosCenterLat * Math.cos(centerLon),
+    Math.sin(centerLat),
+    cosCenterLat * Math.sin(centerLon)
+  ];
+
+  return triangle.some((point) => {
+    const vector = lonLatToVector(point);
+    const dot =
+      vector[0] * centerVector[0] + vector[1] * centerVector[1] + vector[2] * centerVector[2];
+
+    return dot >= -0.08;
+  });
+}
+
 export function centerFromDrag(
   startCenter: MapCenter,
   deltaX: number,
@@ -141,6 +172,10 @@ export function drawScene(options: {
 
   context.beginPath();
   for (const triangle of meshTriangles) {
+    if (projectionKind === 'orthographic' && !isTriangleVisibleOrthographic(triangle, center)) {
+      continue;
+    }
+
     path({
       type: 'Polygon',
       coordinates: [[triangle[0], triangle[1], triangle[2], triangle[0]]]
