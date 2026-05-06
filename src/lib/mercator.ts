@@ -1,4 +1,10 @@
-import { geoGraticule10, geoMercator, geoPath, type GeoProjection } from 'd3-geo';
+import {
+  geoGraticule10,
+  geoMercator,
+  geoOrthographic,
+  geoPath,
+  type GeoProjection
+} from 'd3-geo';
 
 export type MapCenter = {
   lon: number;
@@ -12,10 +18,19 @@ export type Viewport = {
   height: number;
 };
 
+export type ProjectionKind = 'mercator' | 'orthographic';
+
 export const MAX_MERCATOR_LAT = 80;
+export const MAX_ORTHOGRAPHIC_LAT = 89.999;
+
+const WORLD_SPHERE = { type: 'Sphere' } as const;
 
 export function clampMercatorLatitude(latitude: number): number {
   return Math.max(-MAX_MERCATOR_LAT, Math.min(MAX_MERCATOR_LAT, latitude));
+}
+
+export function clampOrthographicLatitude(latitude: number): number {
+  return Math.max(-MAX_ORTHOGRAPHIC_LAT, Math.min(MAX_ORTHOGRAPHIC_LAT, latitude));
 }
 
 export function normalizeLongitude(longitude: number): number {
@@ -26,16 +41,39 @@ export function centerFromDrag(
   startCenter: MapCenter,
   deltaX: number,
   deltaY: number,
-  viewport: Viewport
+  viewport: Viewport,
+  projectionKind: ProjectionKind
 ): MapCenter {
   const safeWidth = Math.max(viewport.width, 1);
   const safeHeight = Math.max(viewport.height, 1);
   const nextLon = normalizeLongitude(startCenter.lon - (deltaX / safeWidth) * 360);
-  const nextLat = clampMercatorLatitude(
-    startCenter.lat + (deltaY / safeHeight) * (MAX_MERCATOR_LAT * 2)
-  );
+  const nextLatRaw = startCenter.lat + (deltaY / safeHeight) * 180;
+  const nextLat =
+    projectionKind === 'orthographic'
+      ? clampOrthographicLatitude(nextLatRaw)
+      : clampMercatorLatitude(nextLatRaw);
 
   return { lon: nextLon, lat: nextLat };
+}
+
+function createProjectionWithFit(
+  factory: () => GeoProjection,
+  viewport: Viewport,
+  center: MapCenter
+): GeoProjection {
+  const pad = Math.max(24, Math.min(viewport.width, viewport.height) * 0.04);
+
+  return factory()
+    .precision(0.2)
+    .center([0, 0])
+    .rotate([-center.lon, -center.lat])
+    .fitExtent(
+      [
+        [pad, pad],
+        [Math.max(pad + 1, viewport.width - pad), Math.max(pad + 1, viewport.height - pad)]
+      ],
+      WORLD_SPHERE
+    );
 }
 
 export function createMercatorProjection(viewport: Viewport, center: MapCenter): GeoProjection {
@@ -47,30 +85,53 @@ export function createMercatorProjection(viewport: Viewport, center: MapCenter):
   const scaleFromHeight = usableHeight / (mercatorYLimit * 2);
   const scale = Math.min(scaleFromWidth, scaleFromHeight);
 
-  const projection = geoMercator()
+  return geoMercator()
     .precision(0.2)
     .center([0, 0])
     .rotate([-center.lon, -center.lat])
     .translate([viewport.width / 2, viewport.height / 2])
     .scale(scale);
+}
 
-  return projection;
+export function createOrthographicProjection(viewport: Viewport, center: MapCenter): GeoProjection {
+  return createProjectionWithFit(geoOrthographic, viewport, center).clipAngle(90.0001);
+}
+
+export function createProjection(
+  viewport: Viewport,
+  center: MapCenter,
+  projectionKind: ProjectionKind
+): GeoProjection {
+  return projectionKind === 'orthographic'
+    ? createOrthographicProjection(viewport, center)
+    : createMercatorProjection(viewport, center);
 }
 
 export function drawScene(options: {
   context: CanvasRenderingContext2D;
   viewport: Viewport;
   center: MapCenter;
+  projectionKind: ProjectionKind;
   land: GeoJSON.FeatureCollection<GeoJSON.Geometry> | GeoJSON.Feature<GeoJSON.Geometry>;
   meshTriangles: Triangle[];
 }): void {
-  const { context, viewport, center, land, meshTriangles } = options;
-  const projection = createMercatorProjection(viewport, center);
+  const { context, viewport, center, projectionKind, land, meshTriangles } = options;
+  const projection = createProjection(viewport, center, projectionKind);
   const path = geoPath(projection, context);
 
   context.clearRect(0, 0, viewport.width, viewport.height);
   context.fillStyle = '#04121d';
   context.fillRect(0, 0, viewport.width, viewport.height);
+
+  if (projectionKind === 'orthographic') {
+    context.beginPath();
+    path(WORLD_SPHERE);
+    context.fillStyle = '#0a2334';
+    context.fill();
+    context.strokeStyle = 'rgba(123, 186, 217, 0.25)';
+    context.lineWidth = 1;
+    context.stroke();
+  }
 
   context.beginPath();
   path(geoGraticule10());

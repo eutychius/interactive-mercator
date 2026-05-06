@@ -3,7 +3,14 @@ import { feature } from 'topojson-client';
 import land110 from 'world-atlas/land-110m.json';
 import globeAssetUrl from '../globe.obj?url';
 import { loadGlobeMesh } from './lib/globeMesh';
-import { centerFromDrag, drawScene, type MapCenter, type Triangle, type Viewport } from './lib/mercator';
+import {
+  centerFromDrag,
+  drawScene,
+  type MapCenter,
+  type ProjectionKind,
+  type Triangle,
+  type Viewport
+} from './lib/mercator';
 
 type DragState = {
   pointerId: number;
@@ -30,6 +37,7 @@ export default function App() {
   const [viewport, setViewport] = useState<Viewport>({ width: 0, height: 0 });
   const defaultCenter: MapCenter = { lon: 0, lat: 12 };
   const [center, setCenter] = useState<MapCenter>(defaultCenter);
+  const [projectionKind, setProjectionKind] = useState<ProjectionKind>('mercator');
   const [meshTriangles, setMeshTriangles] = useState<Triangle[]>([]);
   const [meshStatus, setMeshStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [notesOpen, setNotesOpen] = useState(false);
@@ -109,10 +117,11 @@ export default function App() {
       context,
       viewport,
       center,
+      projectionKind,
       land: landFeature,
       meshTriangles
     });
-  }, [center, meshTriangles, viewport]);
+  }, [center, meshTriangles, projectionKind, viewport]);
 
   const centerLabel = useMemo(
     () => `${formatAngle(center.lon, 'E', 'W')} / ${formatAngle(center.lat, 'N', 'S')}`,
@@ -137,7 +146,13 @@ export default function App() {
     }
 
     setCenter(
-      centerFromDrag(drag.startCenter, event.clientX - drag.startX, event.clientY - drag.startY, viewport)
+      centerFromDrag(
+        drag.startCenter,
+        event.clientX - drag.startX,
+        event.clientY - drag.startY,
+        viewport,
+        projectionKind
+      )
     );
   }
 
@@ -185,6 +200,18 @@ export default function App() {
             <strong>{meshStatus === 'ready' ? `${meshTriangles.length} triangles` : meshStatus}</strong>
           </div>
 
+          <label>
+            <span className="telemetry-label">Projection</span>
+            <select
+              className="projection-select"
+              onChange={(event) => setProjectionKind(event.target.value as ProjectionKind)}
+              value={projectionKind}
+            >
+              <option value="mercator">Mercator</option>
+              <option value="orthographic">Orthographic</option>
+            </select>
+          </label>
+
           <button className="reset-button" onClick={() => setCenter(defaultCenter)} type="button">
             Snap to Regular View
           </button>
@@ -213,8 +240,8 @@ export default function App() {
           </button>
 
           <p>Drag left or right to shift the central longitude.</p>
-          <p>Drag up or down to shift the central latitude inside safe Mercator bounds.</p>
-          <p>The seam wraps at the antimeridian. Use the reset button to return to the standard world view.</p>
+          <p>Drag up or down to shift the central latitude. Mercator stays inside safe bounds, orthographic reaches the poles.</p>
+          <p>Switch projections to compare the flat Mercator seam against the clipped globe view.</p>
         </aside>
       </section>
     </main>
