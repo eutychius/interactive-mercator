@@ -52,11 +52,7 @@ export function createMercatorProjection(viewport: Viewport, center: MapCenter):
     .center([0, 0])
     .rotate([-center.lon, -center.lat])
     .translate([viewport.width / 2, viewport.height / 2])
-    .scale(scale)
-    .clipExtent([
-      [pad, pad],
-      [viewport.width - pad, viewport.height - pad]
-    ]);
+    .scale(scale);
 
   return projection;
 }
@@ -75,11 +71,6 @@ export function drawScene(options: {
   context.clearRect(0, 0, viewport.width, viewport.height);
   context.fillStyle = '#04121d';
   context.fillRect(0, 0, viewport.width, viewport.height);
-
-  context.beginPath();
-  path({ type: 'Sphere' });
-  context.fillStyle = '#072235';
-  context.fill();
 
   context.beginPath();
   path(geoGraticule10());
@@ -106,9 +97,4 @@ export function drawScene(options: {
   context.lineWidth = 0.75;
   context.stroke();
 
-  context.beginPath();
-  path({ type: 'Sphere' });
-  context.strokeStyle = 'rgba(235, 247, 255, 0.4)';
-  context.lineWidth = 1.1;
-  context.stroke();
 }
