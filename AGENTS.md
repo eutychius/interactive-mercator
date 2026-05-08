@@ -186,6 +186,11 @@ Do not mock or stub the tested class, only its dependencies can be mocked.
 
 Before completing any task:
 
+- Use `scripts/run_installpackages.ps1` if needed.
+- Use `scripts/run_build.ps1` to build the project.
+- Use `scripts/run_tests.ps1` (optional `-Filter`) to verify behavior.
+- Use `scripts/run_formatters.ps1` to run formatting and lint/static analysis.
+
 - [ ] Security requirements applied
 - [ ] Tests written and passing
 - [ ] GDPR compliance verified

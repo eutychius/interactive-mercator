@@ -1,0 +1,12 @@
+dist
+node_modules
+package-lock.json
+_wiki
+.github/agents
+.github/skills
+.github/workflows
+.vscode
+AGENTS.md
+HARNESS.md
+README.md
+REFLECTION_LOG.md
