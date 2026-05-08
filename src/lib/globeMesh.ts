@@ -14,7 +14,10 @@ function unwrapTriangle(triangle: Triangle): Triangle {
     return triangle;
   }
 
-  return triangle.map(([longitude, latitude]) => [longitude < 0 ? longitude + 360 : longitude, latitude]) as Triangle;
+  return triangle.map(([longitude, latitude]) => [
+    longitude < 0 ? longitude + 360 : longitude,
+    latitude,
+  ]) as Triangle;
 }
 
 export async function loadGlobeMesh(assetUrl: string): Promise<Triangle[]> {
@@ -27,7 +30,9 @@ export async function loadGlobeMesh(assetUrl: string): Promise<Triangle[]> {
       return;
     }
 
-    const geometry = child.geometry.index ? child.geometry.toNonIndexed() : child.geometry.clone();
+    const geometry = child.geometry.index
+      ? child.geometry.toNonIndexed()
+      : child.geometry.clone();
     const uv = geometry.getAttribute('uv');
 
     if (!uv) {
@@ -38,7 +43,7 @@ export async function loadGlobeMesh(assetUrl: string): Promise<Triangle[]> {
       const triangle = unwrapTriangle([
         uvToLonLat(uv.getX(index), uv.getY(index)),
         uvToLonLat(uv.getX(index + 1), uv.getY(index + 1)),
-        uvToLonLat(uv.getX(index + 2), uv.getY(index + 2))
+        uvToLonLat(uv.getX(index + 2), uv.getY(index + 2)),
       ]);
 
       triangles.push(triangle);

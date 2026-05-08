@@ -3,7 +3,7 @@ import {
   geoMercator,
   geoOrthographic,
   geoPath,
-  type GeoProjection
+  type GeoProjection,
 } from 'd3-geo';
 
 export type MapCenter = {
@@ -30,18 +30,25 @@ export function clampMercatorLatitude(latitude: number): number {
 }
 
 export function clampOrthographicLatitude(latitude: number): number {
-  return Math.max(-MAX_ORTHOGRAPHIC_LAT, Math.min(MAX_ORTHOGRAPHIC_LAT, latitude));
+  return Math.max(
+    -MAX_ORTHOGRAPHIC_LAT,
+    Math.min(MAX_ORTHOGRAPHIC_LAT, latitude),
+  );
 }
 
 export function normalizeLongitude(longitude: number): number {
-  return ((longitude + 180) % 360 + 360) % 360 - 180;
+  return ((((longitude + 180) % 360) + 360) % 360) - 180;
 }
 
 function toRadians(value: number): number {
   return (value * Math.PI) / 180;
 }
 
-function lonLatToVector([longitude, latitude]: LonLat): [number, number, number] {
+function lonLatToVector([longitude, latitude]: LonLat): [
+  number,
+  number,
+  number,
+] {
   const lon = toRadians(longitude);
   const lat = toRadians(latitude);
   const cosLat = Math.cos(lat);
@@ -49,20 +56,25 @@ function lonLatToVector([longitude, latitude]: LonLat): [number, number, number]
   return [cosLat * Math.cos(lon), Math.sin(lat), cosLat * Math.sin(lon)];
 }
 
-function isTriangleVisibleOrthographic(triangle: Triangle, center: MapCenter): boolean {
+function isTriangleVisibleOrthographic(
+  triangle: Triangle,
+  center: MapCenter,
+): boolean {
   const centerLon = toRadians(center.lon);
   const centerLat = toRadians(center.lat);
   const cosCenterLat = Math.cos(centerLat);
   const centerVector: [number, number, number] = [
     cosCenterLat * Math.cos(centerLon),
     Math.sin(centerLat),
-    cosCenterLat * Math.sin(centerLon)
+    cosCenterLat * Math.sin(centerLon),
   ];
 
   return triangle.some((point) => {
     const vector = lonLatToVector(point);
     const dot =
-      vector[0] * centerVector[0] + vector[1] * centerVector[1] + vector[2] * centerVector[2];
+      vector[0] * centerVector[0] +
+      vector[1] * centerVector[1] +
+      vector[2] * centerVector[2];
 
     return dot >= -0.08;
   });
@@ -73,11 +85,13 @@ export function centerFromDrag(
   deltaX: number,
   deltaY: number,
   viewport: Viewport,
-  projectionKind: ProjectionKind
+  projectionKind: ProjectionKind,
 ): MapCenter {
   const safeWidth = Math.max(viewport.width, 1);
   const safeHeight = Math.max(viewport.height, 1);
-  const nextLon = normalizeLongitude(startCenter.lon - (deltaX / safeWidth) * 360);
+  const nextLon = normalizeLongitude(
+    startCenter.lon - (deltaX / safeWidth) * 360,
+  );
   const nextLatRaw = startCenter.lat + (deltaY / safeHeight) * 180;
   const nextLat =
     projectionKind === 'orthographic'
@@ -90,7 +104,7 @@ export function centerFromDrag(
 function createProjectionWithFit(
   factory: () => GeoProjection,
   viewport: Viewport,
-  center: MapCenter
+  center: MapCenter,
 ): GeoProjection {
   const pad = Math.max(24, Math.min(viewport.width, viewport.height) * 0.04);
 
@@ -101,17 +115,25 @@ function createProjectionWithFit(
     .fitExtent(
       [
         [pad, pad],
-        [Math.max(pad + 1, viewport.width - pad), Math.max(pad + 1, viewport.height - pad)]
+        [
+          Math.max(pad + 1, viewport.width - pad),
+          Math.max(pad + 1, viewport.height - pad),
+        ],
       ],
-      WORLD_SPHERE
+      WORLD_SPHERE,
     );
 }
 
-export function createMercatorProjection(viewport: Viewport, center: MapCenter): GeoProjection {
+export function createMercatorProjection(
+  viewport: Viewport,
+  center: MapCenter,
+): GeoProjection {
   const pad = Math.max(24, Math.min(viewport.width, viewport.height) * 0.04);
   const usableWidth = Math.max(1, viewport.width - pad * 2);
   const usableHeight = Math.max(1, viewport.height - pad * 2);
-  const mercatorYLimit = Math.log(Math.tan(Math.PI / 4 + ((MAX_MERCATOR_LAT * Math.PI) / 180) / 2));
+  const mercatorYLimit = Math.log(
+    Math.tan(Math.PI / 4 + (MAX_MERCATOR_LAT * Math.PI) / 180 / 2),
+  );
   const scaleFromWidth = usableWidth / (2 * Math.PI);
   const scaleFromHeight = usableHeight / (mercatorYLimit * 2);
   const scale = Math.min(scaleFromWidth, scaleFromHeight);
@@ -124,14 +146,19 @@ export function createMercatorProjection(viewport: Viewport, center: MapCenter):
     .scale(scale);
 }
 
-export function createOrthographicProjection(viewport: Viewport, center: MapCenter): GeoProjection {
-  return createProjectionWithFit(geoOrthographic, viewport, center).clipAngle(90.0001);
+export function createOrthographicProjection(
+  viewport: Viewport,
+  center: MapCenter,
+): GeoProjection {
+  return createProjectionWithFit(geoOrthographic, viewport, center).clipAngle(
+    90.0001,
+  );
 }
 
 export function createProjection(
   viewport: Viewport,
   center: MapCenter,
-  projectionKind: ProjectionKind
+  projectionKind: ProjectionKind,
 ): GeoProjection {
   return projectionKind === 'orthographic'
     ? createOrthographicProjection(viewport, center)
@@ -143,10 +170,13 @@ export function drawScene(options: {
   viewport: Viewport;
   center: MapCenter;
   projectionKind: ProjectionKind;
-  land: GeoJSON.FeatureCollection<GeoJSON.Geometry> | GeoJSON.Feature<GeoJSON.Geometry>;
+  land:
+    | GeoJSON.FeatureCollection<GeoJSON.Geometry>
+    | GeoJSON.Feature<GeoJSON.Geometry>;
   meshTriangles: Triangle[];
 }): void {
-  const { context, viewport, center, projectionKind, land, meshTriangles } = options;
+  const { context, viewport, center, projectionKind, land, meshTriangles } =
+    options;
   const projection = createProjection(viewport, center, projectionKind);
   const path = geoPath(projection, context);
 
@@ -172,13 +202,16 @@ export function drawScene(options: {
 
   context.beginPath();
   for (const triangle of meshTriangles) {
-    if (projectionKind === 'orthographic' && !isTriangleVisibleOrthographic(triangle, center)) {
+    if (
+      projectionKind === 'orthographic' &&
+      !isTriangleVisibleOrthographic(triangle, center)
+    ) {
       continue;
     }
 
     path({
       type: 'Polygon',
-      coordinates: [[triangle[0], triangle[1], triangle[2], triangle[0]]]
+      coordinates: [[triangle[0], triangle[1], triangle[2], triangle[0]]],
     });
   }
   context.strokeStyle = 'rgba(255, 255, 255, 0.07)';
@@ -192,5 +225,4 @@ export function drawScene(options: {
   context.strokeStyle = 'rgba(5, 18, 29, 0.35)';
   context.lineWidth = 0.75;
   context.stroke();
-
 }

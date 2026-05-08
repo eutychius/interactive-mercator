@@ -9,7 +9,7 @@ import {
   type MapCenter,
   type ProjectionKind,
   type Triangle,
-  type Viewport
+  type Viewport,
 } from './lib/mercator';
 
 type DragState = {
@@ -22,10 +22,16 @@ type DragState = {
 const landTopology = land110 as unknown as { objects: { land: never } };
 const landFeature = feature(
   landTopology as unknown as never,
-  landTopology.objects.land
-) as GeoJSON.FeatureCollection<GeoJSON.Geometry> | GeoJSON.Feature<GeoJSON.Geometry>;
+  landTopology.objects.land,
+) as
+  | GeoJSON.FeatureCollection<GeoJSON.Geometry>
+  | GeoJSON.Feature<GeoJSON.Geometry>;
 
-function formatAngle(value: number, positive: string, negative: string): string {
+function formatAngle(
+  value: number,
+  positive: string,
+  negative: string,
+): string {
   const direction = value >= 0 ? positive : negative;
   return `${Math.abs(value).toFixed(1)}° ${direction}`;
 }
@@ -37,9 +43,12 @@ export default function App() {
   const [viewport, setViewport] = useState<Viewport>({ width: 0, height: 0 });
   const defaultCenter: MapCenter = { lon: 0, lat: 12 };
   const [center, setCenter] = useState<MapCenter>(defaultCenter);
-  const [projectionKind, setProjectionKind] = useState<ProjectionKind>('mercator');
+  const [projectionKind, setProjectionKind] =
+    useState<ProjectionKind>('mercator');
   const [meshTriangles, setMeshTriangles] = useState<Triangle[]>([]);
-  const [meshStatus, setMeshStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [meshStatus, setMeshStatus] = useState<'loading' | 'ready' | 'error'>(
+    'loading',
+  );
   const [notesOpen, setNotesOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -53,7 +62,7 @@ export default function App() {
     const resizeObserver = new ResizeObserver(([entry]) => {
       setViewport({
         width: Math.max(1, Math.round(entry.contentRect.width)),
-        height: Math.max(1, Math.round(entry.contentRect.height))
+        height: Math.max(1, Math.round(entry.contentRect.height)),
       });
     });
 
@@ -67,7 +76,8 @@ export default function App() {
     }
 
     document.addEventListener('fullscreenchange', syncFullscreenState);
-    return () => document.removeEventListener('fullscreenchange', syncFullscreenState);
+    return () =>
+      document.removeEventListener('fullscreenchange', syncFullscreenState);
   }, []);
 
   useEffect(() => {
@@ -119,13 +129,14 @@ export default function App() {
       center,
       projectionKind,
       land: landFeature,
-      meshTriangles
+      meshTriangles,
     });
   }, [center, meshTriangles, projectionKind, viewport]);
 
   const centerLabel = useMemo(
-    () => `${formatAngle(center.lon, 'E', 'W')} / ${formatAngle(center.lat, 'N', 'S')}`,
-    [center]
+    () =>
+      `${formatAngle(center.lon, 'E', 'W')} / ${formatAngle(center.lat, 'N', 'S')}`,
+    [center],
   );
 
   function handlePointerDown(event: React.PointerEvent<HTMLCanvasElement>) {
@@ -134,7 +145,7 @@ export default function App() {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      startCenter: center
+      startCenter: center,
     };
   }
 
@@ -151,8 +162,8 @@ export default function App() {
         event.clientX - drag.startX,
         event.clientY - drag.startY,
         viewport,
-        projectionKind
-      )
+        projectionKind,
+      ),
     );
   }
 
@@ -184,8 +195,10 @@ export default function App() {
           <p className="eyebrow">Interactive Mercator</p>
           <h1>Drag the world until Greenland becomes the center.</h1>
           <p className="lede">
-            Land polygons render through a Mercator projection. The downloaded <code>globe.obj</code> also loads
-            and draws as a projected mesh overlay, so the app uses the supplied model while keeping a readable map.
+            Land polygons render through a Mercator projection. The downloaded{' '}
+            <code>globe.obj</code> also loads and draws as a projected mesh
+            overlay, so the app uses the supplied model while keeping a readable
+            map.
           </p>
         </div>
 
@@ -197,7 +210,11 @@ export default function App() {
 
           <div>
             <span className="telemetry-label">OBJ mesh</span>
-            <strong>{meshStatus === 'ready' ? `${meshTriangles.length} triangles` : meshStatus}</strong>
+            <strong>
+              {meshStatus === 'ready'
+                ? `${meshTriangles.length} triangles`
+                : meshStatus}
+            </strong>
           </div>
 
           <fieldset className="projection-toggle">
@@ -224,17 +241,27 @@ export default function App() {
             </label>
           </fieldset>
 
-          <button className="reset-button" onClick={() => setCenter(defaultCenter)} type="button">
+          <button
+            className="reset-button"
+            onClick={() => setCenter(defaultCenter)}
+            type="button"
+          >
             Snap to Regular View
           </button>
 
-          <button className="secondary-button" onClick={handleFullscreenToggle} type="button">
+          <button
+            className="secondary-button"
+            onClick={handleFullscreenToggle}
+            type="button"
+          >
             {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Map'}
           </button>
         </div>
       </section>
 
-      <section className={`map-panel ${notesOpen ? 'notes-open' : 'notes-closed'}`}>
+      <section
+        className={`map-panel ${notesOpen ? 'notes-open' : 'notes-closed'}`}
+      >
         <div className="map-stage" ref={stageRef}>
           <canvas
             className="map-canvas"
@@ -247,13 +274,23 @@ export default function App() {
         </div>
 
         <aside className="map-notes">
-          <button className="notes-toggle" onClick={() => setNotesOpen((open) => !open)} type="button">
+          <button
+            className="notes-toggle"
+            onClick={() => setNotesOpen((open) => !open)}
+            type="button"
+          >
             {notesOpen ? 'Hide Notes' : 'Show Notes'}
           </button>
 
           <p>Drag left or right to shift the central longitude.</p>
-          <p>Drag up or down to shift the central latitude. Mercator stays inside safe bounds, orthographic reaches the poles.</p>
-          <p>Switch projections to compare the flat Mercator seam against the clipped globe view.</p>
+          <p>
+            Drag up or down to shift the central latitude. Mercator stays inside
+            safe bounds, orthographic reaches the poles.
+          </p>
+          <p>
+            Switch projections to compare the flat Mercator seam against the
+            clipped globe view.
+          </p>
         </aside>
       </section>
     </main>

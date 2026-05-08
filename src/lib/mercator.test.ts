@@ -5,7 +5,7 @@ import {
   centerFromDrag,
   clampMercatorLatitude,
   clampOrthographicLatitude,
-  normalizeLongitude
+  normalizeLongitude,
 } from './mercator';
 
 describe('mercator helpers', () => {
@@ -31,9 +31,9 @@ describe('mercator helpers', () => {
       -100,
       {
         width: 800,
-        height: 400
+        height: 400,
       },
-      'mercator'
+      'mercator',
     );
 
     expect(center.lon).toBe(-90);
@@ -47,9 +47,9 @@ describe('mercator helpers', () => {
       100,
       {
         width: 800,
-        height: 400
+        height: 400,
       },
-      'orthographic'
+      'orthographic',
     );
 
     expect(center.lat).toBe(MAX_ORTHOGRAPHIC_LAT);

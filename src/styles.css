@@ -27,8 +27,16 @@ body {
   min-height: 100vh;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(70, 163, 197, 0.26), transparent 26%),
-    radial-gradient(circle at right 20%, rgba(199, 222, 120, 0.12), transparent 20%),
+    radial-gradient(
+      circle at top left,
+      rgba(70, 163, 197, 0.26),
+      transparent 26%
+    ),
+    radial-gradient(
+      circle at right 20%,
+      rgba(199, 222, 120, 0.12),
+      transparent 20%
+    ),
     linear-gradient(160deg, var(--bg-0), var(--bg-1) 58%, var(--bg-2));
 }
 
@@ -168,7 +176,11 @@ code {
   min-height: 72vh;
   border-radius: 22px;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(16, 46, 65, 0.85), rgba(4, 15, 24, 0.95));
+  background: linear-gradient(
+    180deg,
+    rgba(16, 46, 65, 0.85),
+    rgba(4, 15, 24, 0.95)
+  );
 }
 
 .map-stage:fullscreen {
