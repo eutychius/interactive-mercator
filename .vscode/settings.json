@@ -1,5 +1,6 @@
 {
     "chat.tools.terminal.autoApprove": {
-        "npm install": true
+        "npm install": true,
+        ".\\scripts\\run_installpackages.ps1": true
     }
 }
