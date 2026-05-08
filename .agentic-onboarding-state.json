@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "targetFolder": "D:\\OtherProjects\\interactive-mercator",
+  "startedAt": "2026-05-08T11:36:28.234Z",
+  "currentStep": "create-run-scripts",
+  "completedSteps": [
+    "copy-files",
+    "setup-mcps",
+    "architecture-analysis"
+  ],
+  "pendingAgentTask": null,
+  "config": {
+    "selectedMcps": [],
+    "unattended": true,
+    "agentFormat": "copilot"
+  }
+}

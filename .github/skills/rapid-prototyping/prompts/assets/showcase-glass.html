@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glass Design System — Showcase</title>
+  <link rel="stylesheet" href="glass.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sharp background shapes for visible glass blur -->
+<div class="bg-shapes">
+  <span class="shape-circle"></span>
+  <span class="shape-square"></span>
+  <span class="shape-dot"></span>
+  <span class="shape-bar"></span>
+  <span class="shape-ring"></span>
+  <span class="shape-diamond"></span>
+  <span class="shape-dot-sm"></span>
+  <span class="shape-pill"></span>
+  <span class="shape-circle-md"></span>
+</div>
+
+<div class="container">
+
+  <!-- ── Page Header ──────────────────────────────────── -->
+  <header style="margin-bottom: var(--sp-12);">
+    <p class="text-muted" style="margin-bottom: var(--sp-2);">Design System</p>
+    <h1>Glass</h1>
+    <p style="max-width: 480px; margin-top: var(--sp-3);">
+      Minimal, light-mode UI foundation combining glassmorphism with clean editorial layout.
+    </p>
+  </header>
+
+  <!-- ── Hero Split ───────────────────────────────────── -->
+  <section class="split" style="margin-bottom: var(--sp-16); align-items: stretch;">
+
+    <!-- Left: Glass feature card + tasks -->
+    <div class="stack">
+      <div class="glass-card" style="min-height: 320px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <span class="badge badge--accent">New</span>
+          <h2 style="margin-top: var(--sp-4);">Dashboard Overview</h2>
+          <p style="margin-top: var(--sp-3);">
+            See everything at a glance. Track metrics, review activity, and stay in control — all in one calm, focused view.
+          </p>
+        </div>
+        <div class="row" style="margin-top: var(--sp-6);">
+          <button class="btn btn--primary">Get Started</button>
+          <button class="btn btn--glass">Learn More</button>
+        </div>
+      </div>
+
+      <div class="card" style="flex: 1;">
+        <h4 style="margin-bottom: var(--sp-3);">Tasks</h4>
+        <div class="ilist-item" onclick="this.classList.toggle('checked')">
+          <span class="ilist-item__check">✓</span>
+          <span class="ilist-item__text">Set up project repository</span>
+          <button class="ilist-item__action">Remove</button>
+        </div>
+        <div class="ilist-item" onclick="this.classList.toggle('checked')">
+          <span class="ilist-item__check">✓</span>
+          <span class="ilist-item__text">Define component API contracts</span>
+          <button class="ilist-item__action">Remove</button>
+        </div>
+        <div class="ilist-item" onclick="this.classList.toggle('checked')">
+          <span class="ilist-item__check">✓</span>
+          <span class="ilist-item__text">Build glass card primitives</span>
+          <button class="ilist-item__action">Remove</button>
+        </div>
+        <div class="ilist-item" onclick="this.classList.toggle('checked')">
+          <span class="ilist-item__check">✓</span>
+          <span class="ilist-item__text">Write end-to-end test suite</span>
+          <button class="ilist-item__action">Remove</button>
+        </div>
+        <div class="ilist-item" onclick="this.classList.toggle('checked')">
+          <span class="ilist-item__check">✓</span>
+          <span class="ilist-item__text">Deploy staging environment</span>
+          <button class="ilist-item__action">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Stats stack -->
+    <div class="stack">
+      <div class="glass-card">
+        <div class="row" style="gap: var(--sp-8);">
+          <div class="stat">
+            <span class="stat__value">2,847</span>
+            <span class="stat__label">Active Users</span>
+          </div>
+          <div class="stat">
+            <span class="stat__value">94%</span>
+            <span class="stat__label">Satisfaction</span>
+          </div>
+          <div class="stat">
+            <span class="stat__value">1.2s</span>
+            <span class="stat__label">Avg. Load</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solid card with slider -->
+      <div class="card">
+        <div class="section-header">
+          <h3>Budget Allocation</h3>
+          <span class="text-muted" id="slider-value">62%</span>
+        </div>
+        <input type="range" class="slider" min="0" max="100" value="62"
+          oninput="document.getElementById('slider-value').textContent = this.value + '%'; this.style.setProperty('--val', this.value + '%')"
+          style="--val: 62%">
+        <div class="row" style="justify-content: space-between; margin-top: var(--sp-3);">
+          <small class="text-muted">Engineering</small>
+          <small class="text-muted">Marketing</small>
+        </div>
+      </div>
+
+      <!-- Solid card with list -->
+      <div class="card">
+        <h4 style="margin-bottom: var(--sp-3);">Recent Activity</h4>
+        <div class="list-item">
+          <div class="avatar avatar--sm">A</div>
+          <div class="list-item__content">
+            <div style="font-size: 0.875rem; font-weight: 500;">Anna merged PR #142</div>
+            <small class="text-muted">2 min ago</small>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="avatar avatar--sm">M</div>
+          <div class="list-item__content">
+            <div style="font-size: 0.875rem; font-weight: 500;">Marco opened issue #87</div>
+            <small class="text-muted">14 min ago</small>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="avatar avatar--sm">S</div>
+          <div class="list-item__content">
+            <div style="font-size: 0.875rem; font-weight: 500;">Sara deployed v2.4.1</div>
+            <small class="text-muted">1 hr ago</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Card Grid ────────────────────────────────────── -->
+  <section style="margin-bottom: var(--sp-16);">
+    <div class="section-header">
+      <h2>Components</h2>
+      <span class="text-muted">Glass · Solid · Mixed</span>
+    </div>
+
+    <div class="grid-auto">
+
+      <!-- Glass card with inner solid block -->
+      <div class="glass-card">
+        <h4>Notifications</h4>
+        <p style="margin: var(--sp-3) 0;">3 unread messages</p>
+        <div class="inner-block">
+          <div style="font-size: 0.8125rem; font-weight: 500;">Team standup in 15 min</div>
+          <small class="text-muted">Calendar · Today 09:30</small>
+        </div>
+        <div class="inner-block" style="margin-top: var(--sp-2);">
+          <div style="font-size: 0.8125rem; font-weight: 500;">Build succeeded</div>
+          <small class="text-muted">CI · Pipeline #481</small>
+        </div>
+      </div>
+
+      <!-- Solid card -->
+      <div class="card">
+        <h4>Team Members</h4>
+        <p style="margin: var(--sp-3) 0 var(--sp-4);">4 online now</p>
+        <div class="row">
+          <div class="avatar">A</div>
+          <div class="avatar">M</div>
+          <div class="avatar">S</div>
+          <div class="avatar">J</div>
+        </div>
+      </div>
+
+      <!-- Glass card with input -->
+      <div class="glass-card">
+        <h4>Quick Note</h4>
+        <p style="margin: var(--sp-3) 0 var(--sp-4);">Capture something fast</p>
+        <input class="input input--glass" type="text" placeholder="Type a note…">
+        <button class="btn btn--glass" style="margin-top: var(--sp-3); width: 100%;">Save</button>
+      </div>
+
+      <!-- Solid card with form -->
+      <div class="card">
+        <h4>Search</h4>
+        <p style="margin: var(--sp-3) 0 var(--sp-4);">Find anything in the workspace</p>
+        <input class="input" type="text" placeholder="Search files, tasks, people…">
+        <div class="row" style="margin-top: var(--sp-3);">
+          <span class="badge badge--muted">Files</span>
+          <span class="badge badge--muted">Tasks</span>
+          <span class="badge badge--accent">All</span>
+        </div>
+      </div>
+
+      <!-- Glass card with stat -->
+      <div class="glass-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+        <div class="stat" style="align-items: center;">
+          <span class="stat__value" style="font-size: 3rem;">↑ 24%</span>
+          <span class="stat__label">Velocity this sprint</span>
+        </div>
+      </div>
+
+      <!-- Solid card with divider -->
+      <div class="card">
+        <h4>Settings</h4>
+        <hr class="divider" style="margin: var(--sp-4) 0;">
+        <div class="list-item" style="padding-top: 0;">
+          <div class="list-item__content">
+            <div style="font-size: 0.875rem;">Dark Mode</div>
+          </div>
+          <span class="text-muted">Off</span>
+        </div>
+        <div class="list-item">
+          <div class="list-item__content">
+            <div style="font-size: 0.875rem;">Notifications</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="toggle__track"></span>
+          </label>
+        </div>
+        <div class="list-item">
+          <div class="list-item__content">
+            <div style="font-size: 0.875rem;">Language</div>
+          </div>
+          <span class="text-muted">EN</span>
+        </div>
+      </div>
+
+      <!-- Card deck -->
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <div class="card-deck">
+          <div class="deck-card glass-card">
+            <span class="deck-card__label">Design</span>
+            <span class="deck-card__title">Brand Refresh</span>
+          </div>
+          <div class="deck-card glass-card">
+            <span class="deck-card__label">Frontend</span>
+            <span class="deck-card__title">Component Lib</span>
+          </div>
+          <div class="deck-card glass-card">
+            <span class="deck-card__label">Backend</span>
+            <span class="deck-card__title">API Gateway</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Data Table ───────────────────────────────────── -->
+  <section style="margin-bottom: var(--sp-16);">
+    <div class="section-header">
+      <h2>Team Overview</h2>
+      <span class="text-muted">6 members</span>
+    </div>
+    <div class="card table-wrap" style="padding: 0;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Tasks</th>
+            <th>Completion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="row" style="align-items: center; gap: var(--sp-2); flex-wrap: nowrap;"><div class="avatar avatar--sm">A</div> Anna Meier</div></td>
+            <td contenteditable="true">Lead Engineer</td>
+            <td><span class="badge badge--accent">Active</span></td>
+            <td>12</td>
+            <td>
+              <div class="progress" style="width: 80px;"><div class="progress__bar" style="width: 85%;"></div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="row" style="align-items: center; gap: var(--sp-2); flex-wrap: nowrap;"><div class="avatar avatar--sm">M</div> Marco Silva</div></td>
+            <td contenteditable="true">Backend Dev</td>
+            <td><span class="badge badge--accent">Active</span></td>
+            <td>9</td>
+            <td>
+              <div class="progress" style="width: 80px;"><div class="progress__bar" style="width: 67%;"></div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="row" style="align-items: center; gap: var(--sp-2); flex-wrap: nowrap;"><div class="avatar avatar--sm">S</div> Sara Johansson</div></td>
+            <td contenteditable="true">DevOps</td>
+            <td><span class="badge badge--muted">Away</span></td>
+            <td>5</td>
+            <td>
+              <div class="progress" style="width: 80px;"><div class="progress__bar" style="width: 100%;"></div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="row" style="align-items: center; gap: var(--sp-2); flex-wrap: nowrap;"><div class="avatar avatar--sm">J</div> Jonas Bauer</div></td>
+            <td contenteditable="true">Frontend Dev</td>
+            <td><span class="badge badge--accent">Active</span></td>
+            <td>8</td>
+            <td>
+              <div class="progress" style="width: 80px;"><div class="progress__bar" style="width: 50%;"></div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="row" style="align-items: center; gap: var(--sp-2); flex-wrap: nowrap;"><div class="avatar avatar--sm">L</div> Lina Chen</div></td>
+            <td contenteditable="true">Designer</td>
+            <td><span class="badge badge--accent">Active</span></td>
+            <td>6</td>
+            <td>
+              <div class="progress" style="width: 80px;"><div class="progress__bar" style="width: 72%;"></div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="row" style="align-items: center; gap: var(--sp-2); flex-wrap: nowrap;"><div class="avatar avatar--sm">T</div> Tom Weber</div></td>
+            <td contenteditable="true">QA Engineer</td>
+            <td><span class="badge badge--muted">Away</span></td>
+            <td>4</td>
+            <td>
+              <div class="progress" style="width: 80px;"><div class="progress__bar" style="width: 90%;"></div></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────────── -->
+  <footer style="text-align: center; padding: var(--sp-8) 0;">
+    <p class="text-muted">Glass Design System · Showcase</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
