@@ -1,0 +1,34 @@
+<mxfile host="app.diagrams.net" modified="2026-05-15T00:00:00.000Z" agent="GPT-5.4" version="24.7.17">
+  <diagram id="interactive-mercator-context" name="Page-1">
+    <mxGraphModel dx="1242" dy="747" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Interactive Mercator - C4 Level 1 System Context" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="264" y="30" width="640" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="user" value="&lt;b&gt;User&lt;/b&gt;&lt;br&gt;Explores alternate world map centers by dragging the map" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#c2410c;fontColor=#7c2d12;arcSize=12;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="250" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="browser" value="&lt;b&gt;Web Browser&lt;/b&gt;&lt;br&gt;Hosts the Vite-built SPA and renders the canvas UI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#1d4ed8;fontColor=#1e3a8a;arcSize=12;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="360" y="120" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="app" value="&lt;b&gt;Interactive Mercator&lt;/b&gt;&lt;br&gt;Client-side React app that reprojects world geography and an OBJ mesh in real time" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontColor=#065f46;arcSize=12;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="360" y="300" width="340" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="data" value="&lt;b&gt;Bundled World Data&lt;/b&gt;&lt;br&gt;world-atlas TopoJSON land dataset and local globe OBJ asset" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#7c3aed;fontColor=#5b21b6;arcSize=12;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="250" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-user-browser" value="Opens local app and drags the projection" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;fontColor=#334155;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="user" target="browser">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-browser-app" value="Loads and runs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;fontColor=#334155;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="browser" target="app">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-app-data" value="Reads static assets to build projected map and mesh overlay" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;fontColor=#334155;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="app" target="data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="460" viewBox="0 0 1080 460" role="img" aria-labelledby="title desc">
+  <title id="title">Interactive Mercator - C4 Level 1 System Context</title>
+  <desc id="desc">System context diagram showing the user, web browser, Interactive Mercator application, and bundled world data with their relationships.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,3 L0,6 z" fill="#475569" />
+    </marker>
+    <style>
+      .title { font: 700 24px 'Segoe UI', sans-serif; fill: #0f172a; }
+      .label { font: 700 18px 'Segoe UI', sans-serif; }
+      .body { font: 14px 'Segoe UI', sans-serif; }
+      .edge { font: 13px 'Segoe UI', sans-serif; fill: #334155; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1080" height="460" fill="#ffffff" />
+  <text x="540" y="42" text-anchor="middle" class="title">Interactive Mercator - C4 Level 1 System Context</text>
+
+  <rect x="60" y="210" rx="16" ry="16" width="230" height="100" fill="#fff7ed" stroke="#c2410c" stroke-width="2" />
+  <text x="175" y="242" text-anchor="middle" class="label" fill="#7c2d12">User</text>
+  <text x="175" y="266" text-anchor="middle" class="body" fill="#7c2d12">Explores alternate world map centers</text>
+  <text x="175" y="286" text-anchor="middle" class="body" fill="#7c2d12">by dragging the map</text>
+
+  <rect x="350" y="90" rx="16" ry="16" width="250" height="100" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2" />
+  <text x="475" y="122" text-anchor="middle" class="label" fill="#1e3a8a">Web Browser</text>
+  <text x="475" y="146" text-anchor="middle" class="body" fill="#1e3a8a">Hosts the Vite-built SPA and</text>
+  <text x="475" y="166" text-anchor="middle" class="body" fill="#1e3a8a">renders the canvas UI</text>
+
+  <rect x="330" y="260" rx="16" ry="16" width="340" height="120" fill="#ecfdf5" stroke="#047857" stroke-width="2" />
+  <text x="500" y="292" text-anchor="middle" class="label" fill="#065f46">Interactive Mercator</text>
+  <text x="500" y="316" text-anchor="middle" class="body" fill="#065f46">Client-side React app that reprojects</text>
+  <text x="500" y="336" text-anchor="middle" class="body" fill="#065f46">world geography and an OBJ mesh</text>
+  <text x="500" y="356" text-anchor="middle" class="body" fill="#065f46">in real time</text>
+
+  <rect x="760" y="210" rx="16" ry="16" width="260" height="100" fill="#faf5ff" stroke="#7c3aed" stroke-width="2" />
+  <text x="890" y="242" text-anchor="middle" class="label" fill="#5b21b6">Bundled World Data</text>
+  <text x="890" y="266" text-anchor="middle" class="body" fill="#5b21b6">world-atlas TopoJSON land dataset</text>
+  <text x="890" y="286" text-anchor="middle" class="body" fill="#5b21b6">and local globe OBJ asset</text>
+
+  <line x1="290" y1="235" x2="350" y2="165" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)" />
+  <rect x="245" y="155" width="160" height="34" rx="8" ry="8" fill="#ffffff" />
+  <text x="325" y="177" text-anchor="middle" class="edge">Opens local app and drags</text>
+  <text x="325" y="192" text-anchor="middle" class="edge">the projection</text>
+
+  <line x1="475" y1="190" x2="500" y2="260" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)" />
+  <rect x="430" y="205" width="90" height="26" rx="8" ry="8" fill="#ffffff" />
+  <text x="475" y="223" text-anchor="middle" class="edge">Loads and runs</text>
+
+  <line x1="670" y1="310" x2="760" y2="260" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)" />
+  <rect x="676" y="188" width="175" height="50" rx="8" ry="8" fill="#ffffff" />
+  <text x="764" y="208" text-anchor="middle" class="edge">Reads static assets to build</text>
+  <text x="764" y="224" text-anchor="middle" class="edge">projected map and mesh overlay</text>
+</svg>

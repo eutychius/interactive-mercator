@@ -2,18 +2,9 @@
 
 ## System Context
 
-```mermaid
-C4Context
-    title Interactive Mercator - System Context
-    Person(user, "User", "Explores alternate world map centers by dragging the map")
-    System(app, "Interactive Mercator", "Client-side React app that reprojects world geography and an OBJ mesh in real time")
-    System_Ext(browser, "Web Browser", "Hosts the Vite-built SPA and renders the canvas UI")
-    System_Ext(data, "Bundled World Data", "world-atlas TopoJSON land dataset and local globe OBJ asset")
+![Interactive Mercator C4 Level 1 System Context](./architecture-context-level1.svg)
 
-    Rel(user, browser, "Opens local app and drags the projection")
-    Rel(browser, app, "Loads and runs")
-    Rel(app, data, "Reads static assets to build projected map and mesh overlay")
-```
+Source: [architecture-context-level1.drawio](./architecture-context-level1.drawio)
 
 ## High-Level Overview
 
